@@ -1,0 +1,27 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+jobs:
+- job: infrastructure
+  pool:
+    vmImage: 'ubuntu-20.04'
+  steps:
+  - task: Npm@1
+    inputs:
+      command: install
+      workingDir: "./"
+  - task: Pulumi@1
+    inputs:
+      azureSubscription: 'My Service Connection'
+      command: 'preview'
+      cwd: './'
+      stack: 'acmeCorp/acmeProject/acme-ui'
+  - task: Pulumi@1
+    inputs:
+      azureSubscription: 'My Service Connection'
+      command: 'up'
+      cwd: './'
+      stack: 'acmeCorp/acmeProject/acme-ui'
+      args: '--yes'
